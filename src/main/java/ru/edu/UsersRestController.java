@@ -1,6 +1,7 @@
 package ru.edu;
 
 import java.util.Collection;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,12 @@ public class UsersRestController {
 
   @GetMapping("/find")
   public UserInfo find(@RequestParam(value = "id") String id) {
-    return usersCatalog.getById(id);
+    UserInfo userInfo = usersCatalog.getById(id);
+    if (Objects.isNull(userInfo)) {
+      throw new IllegalStateException("id " + id + " not found");
+    }
+
+    return userInfo;
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
